@@ -18,6 +18,10 @@
     "jsonschema",
     "editor"
   ],
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org",
+    "access": "public"
+  },
   "scripts": {
     "prepare": "npm run build",
     "clean": "npm run clean.css.js",
