@@ -1,20 +1,16 @@
 {
-  "name": "@json-editor/json-editor",
+  "name": "@mia-platform/json-editor",
   "title": "JSONEditor",
   "description": "JSON Schema based editor",
   "version": "2.2.1",
   "main": "dist/jsoneditor.js",
-  "author": {
-    "name": "Jeremy Dorn",
-    "email": "jeremy@jeremydorn.com",
-    "url": "http://jeremydorn.com"
-  },
+  "author": "Mia Platform Core Team<core@mia-platform.eu>",
   "bugs": {
-    "url": "https://github.com/json-editor/json-editor/issues"
+    "url": "https://github.com/mia-platform/json-editor/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/json-editor/json-editor.git"
+    "url": "https://github.com/mia-platform/json-editor.git"
   },
   "keywords": [
     "json",
