@@ -1,5 +1,7 @@
 ### Unreleased
 
+### 2.3.1
+
 - fix: when `use_default_values` is false, number and integer fields have undefined value when input is empty
 - fix: when `use_default_values` is false, string fields have undefined value at the beginning. After that user edit the field, empty input is threated as an empty string
 
