@@ -1,10 +1,13 @@
 ### Unreleased
 - added option `max_depth` used to specify the maximum depth of level's schema that have to be rendered
 - added option `use_default_values` used to specify if default values based on the "type" of the property have to be used
+- when `use_default_values` is false, number and integer fields have undefined value when input is empty
+- when `use_default_values` is false, string fields have undefined value at the beginning. After that user edit the field, empty input is threated as an empty string
 
 ### 2.3.0-dev
 
 - Removed codeception container, use `codeceptjs` as node-dev module
+- Enabled Bootstrap 3 theme/icons
 
 ### 2.2.1-current
 
@@ -53,6 +56,7 @@
   - Fix of #629 - BS4 theme bug where basic tab was placed outside tabs container.
   - Improved IMask support for `Date`, `Number`, `IMask.MaskedEnum`, `IMask.MaskedRange` and regular expression masks. #591
   - Added support for recursive callback options.
+  - Fix of #692 - Resolves an issue where modal click detection was not working when the editor is attached inside a shadow DOM by changing the event target to use the path.
 
 ### 2.0.0-alpha-1
 
