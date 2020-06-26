@@ -340,10 +340,10 @@ export class Validator {
             // eslint-disable-next-line no-prototype-builtins
             if (value.hasOwnProperty(e)) {
               if (this._checkType('string', value[e]) && value[e].length === 0) {
-                errors.push({ path, property: 'required', message: this.translate('error_required', [e]) })
+                errors.push({ path, property: e, message: this.translate('error_required', [e]) })
               }
               if (value[e] === undefined) {
-                errors.push({ path, property: 'required', message: this.translate('error_required', [e]) })
+                errors.push({ path, property: e, message: this.translate('error_required', [e]) })
               }
             }
 
@@ -366,8 +366,10 @@ export class Validator {
         Object.entries(schema.properties).forEach(([key, prop]) => {
           // validatedProperties[key] = true
           // errors.push(...this._validateSchema(prop, value[key], `${path}.${key}`))
-          if (!this._checkType(prop.type, value[key])) {
-            errors.push({ path, property: 'property_error_type', message: this.translate('property_error_type', [key, prop.type]) })
+
+          // se è number non funziona perché number vuoto è undefined
+          if (value[key] !== undefined && !this._checkType(prop.type, value[key])) {
+            errors.push({ path, property: key, message: this.translate('property_error_type', [key, prop.type]) })
           }
         })
         return errors

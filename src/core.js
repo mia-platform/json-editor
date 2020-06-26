@@ -231,13 +231,14 @@ export class JSONEditor {
     if (this.options.show_errors !== 'never') {
       this.validation_results = this.validator.validate(this.root.getValue())
       // TODO: capire meglio cosa fa sto show
+      console.log('THIS_ROOT', this.root)
       this.root.showValidationErrors(this.validation_results)
     } else {
       this.root.showValidationErrors([])
     }
 
     /* Fire change event */
-    // this.trigger('change')
+    this.trigger('change')
     // })
 
     return this

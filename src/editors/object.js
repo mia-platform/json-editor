@@ -1,10 +1,13 @@
 import { AbstractEditor } from '../editor.js'
 import { extend, trigger, hasOwnProperty } from '../utilities.js'
+import { difference } from 'ramda'
 
 export class ObjectEditor extends AbstractEditor {
   constructor (options, defaults, depth) {
     super(options, defaults)
     this.currentDepth = depth
+    this.errorMessageNode = {}
+    this.lastErrors = []
   }
 
   getDefault () {
@@ -1223,44 +1226,69 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
+    // [{property: 'id', message: '...'}] [] -> push nel dom && cache {'id': node}
+    // mentre ciclo gli elementi da rimuovere nel dom, devo anche rimuoverli dall'oggetto cache
+    console.log('showValidationErrors', this, errors)
+
+    // che c'è nella prima e che manca nella seconda
+    const differenceFromLastErrors = difference(this.lastErrors, errors)
+    console.log(differenceFromLastErrors)
+
+    // {id: nodi di errore}
+    if (differenceFromLastErrors.length > 0) {
+      differenceFromLastErrors.forEach(({ property }) => {
+        this.errorMessageNode[property].remove()
+        delete this.errorMessageNode[property]
+      })
+    }
+
+    this.lastErrors = errors
+    console.log('differenceFromLastErrors NODE', this.lastErrors, errors, difference(this.lastErrors, errors))
+    console.log('MESSAGE NODE', this.errorMessageNode)
+    errors.forEach(({ property, message }) => {
+      if (!this.errorMessageNode[property]) {
+        this.errorMessageNode[property] = this.editors[property].container.appendChild(this.theme.getErrorMessage(message))
+      }
+    })
+
     /* Get all the errors that pertain to this editor */
-    const myErrors = []
-    const otherErrors = []
-    errors.forEach(error => {
-      if (error.path === this.path) {
-        myErrors.push(error)
-      } else {
-        otherErrors.push(error)
-      }
-    })
-
-    /* Show errors for this editor */
-    if (this.error_holder) {
-      if (myErrors.length) {
-        this.error_holder.innerHTML = ''
-        this.error_holder.style.display = ''
-        myErrors.forEach(error => {
-          if (error.errorcount && error.errorcount > 1) error.message += ` (${error.errorcount} errors)`
-          this.error_holder.appendChild(this.theme.getErrorMessage(error.message))
-        })
-        /* Hide error area */
-      } else {
-        this.error_holder.style.display = 'none'
-      }
-    }
-
-    /* Show error for the table row if this is inside a table */
-    if (this.options.table_row) {
-      if (myErrors.length) {
-        this.theme.addTableRowError(this.container)
-      } else {
-        this.theme.removeTableRowError(this.container)
-      }
-    }
-
-    /* Show errors for child editors */
-    Object.values(this.editors).forEach(editor => {
-      editor.showValidationErrors(otherErrors)
-    })
+    // const myErrors = []
+    // const otherErrors = []
+    // errors.forEach(error => {
+    //   if (error.path === this.path) {
+    //     myErrors.push(error)
+    //   } else {
+    //     otherErrors.push(error)
+    //   }
+    // })
+    //
+    // /* Show errors for this editor */
+    // if (this.error_holder) {
+    //   if (myErrors.length) {
+    //     this.error_holder.innerHTML = ''
+    //     this.error_holder.style.display = ''
+    //     myErrors.forEach(error => {
+    //       if (error.errorcount && error.errorcount > 1) error.message += ` (${error.errorcount} errors)`
+    //       this.error_holder.appendChild(this.theme.getErrorMessage(error.message))
+    //     })
+    //     /* Hide error area */
+    //   } else {
+    //     this.error_holder.style.display = 'none'
+    //   }
+    // }
+    //
+    // /* Show error for the table row if this is inside a table */
+    // if (this.options.table_row) {
+    //   if (myErrors.length) {
+    //     this.theme.addTableRowError(this.container)
+    //   } else {
+    //     this.theme.removeTableRowError(this.container)
+    //   }
+    // }
+    //
+    // /* Show errors for child editors */
+    // Object.values(this.editors).forEach(editor => {
+    //   editor.showValidationErrors(otherErrors)
+    // })
   }
 }
