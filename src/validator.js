@@ -535,15 +535,7 @@ export class Validator {
   }
 
   _validateV3Required (schema, value, path) {
-    if (
-      (
-        typeof schema.required !== 'undefined' &&
-        schema.required === true
-      ) || (
-        typeof schema.required === 'undefined' &&
-        this.jsoneditor.options.required_by_default === true
-      )
-    ) {
+    if ((typeof schema.required !== 'undefined' && schema.required === true) || (typeof schema.required === 'undefined' && this.jsoneditor.options.required_by_default === true)) {
       return [{
         path,
         property: 'required',
