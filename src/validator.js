@@ -363,8 +363,8 @@ export class Validator {
       properties (schema, values, path, validatedProperties) {
         const errors = []
         Object.entries(schema.properties).forEach(([key, propertyValue]) => {
-          // validatedProperties[key] = true
-          // errors.push(...this._validateSchema(prop, value[key], `${path}.${key}`))
+          validatedProperties[key] = true
+          errors.push(...this._validateSchema(key, values[key], `${path}.${key}`))
 
           if (values[key] !== undefined && !this._checkType(propertyValue.type, values[key])) {
             errors.push({
@@ -501,7 +501,6 @@ export class Validator {
     /*
      * Type Specific Validation
      */
-    console.log('unica validazione', schema, value, path)
     errors.push(...this._validateByValueType(schema, value, path))
 
     if (schema.links) {
@@ -522,7 +521,6 @@ export class Validator {
     errors.push(...this._validateCustomValidator(schema, value, path))
 
     /* Remove duplicate errors and add "errorcount" property */
-    console.log('ERRORS PUSHATI', errors)
     return this._removeDuplicateErrors(errors)
   }
 
@@ -573,7 +571,6 @@ export class Validator {
       /* `maxLength` */
       /* `minLength` */
       /* `pattern` */
-      console.log('TYPE STRING')
       Object.keys(schema).forEach(key => {
         if (this._validateStringSubSchema[key]) {
           errors.push(...this._validateStringSubSchema[key].call(this, schema, value, path))
