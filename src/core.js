@@ -77,18 +77,21 @@ export class JSONEditor {
       /* Starting data */
       if (hasOwnProperty(this.options, 'startval')) this.root.setValue(this.options.startval)
 
-      console.log('VALIDATION OFF')
-      // this.validation_results = this.validator.validate(this.root.getValue())
-      // this.root.showValidationErrors(this.validation_results)
+      if (!this.options.disabled_validation_on_mount) {
+        this.validation_results = this.validator.validate(this.root.getValue())
+        this.root.showValidationErrors(this.validation_results)
+      }
       this.ready = true
 
       /* Fire ready event asynchronously */
       window.requestAnimationFrame(() => {
         if (!this.ready) return
-        // this.validation_results = this.validator.validate(this.root.getValue())
-        // this.root.showValidationErrors(this.validation_results)
+        if (!this.options.disabled_validation_on_mount) {
+          this.validation_results = this.validator.validate(this.root.getValue())
+          this.root.showValidationErrors(this.validation_results)
+          this.trigger('change')
+        }
         this.trigger('ready')
-        // this.trigger('change')
       })
     }, fetchUrl, location)
   }
@@ -219,19 +222,10 @@ export class JSONEditor {
 
   onChange () {
     if (!this.ready) return
-    // if (this.firing_change) return
-    // this.firing_change = true
-    //
-    // window.requestAnimationFrame(() => {
-    //   this.firing_change = false
-    //   if (!this.ready) return
 
     /* Validate and cache results */
-
     if (this.options.show_errors !== 'never') {
       this.validation_results = this.validator.validate(this.root.getValue())
-      // TODO: capire meglio cosa fa sto show
-      console.log('THIS_ROOT', this.root)
       this.root.showValidationErrors(this.validation_results)
     } else {
       this.root.showValidationErrors([])
@@ -239,7 +233,6 @@ export class JSONEditor {
 
     /* Fire change event */
     this.trigger('change')
-    // })
 
     return this
   }

@@ -340,36 +340,38 @@ export class Validator {
             // eslint-disable-next-line no-prototype-builtins
             if (value.hasOwnProperty(e)) {
               if (this._checkType('string', value[e]) && value[e].length === 0) {
-                errors.push({ path, property: e, message: this.translate('error_required', [e]) })
+                errors.push({
+                  path: `${path}.${e}`,
+                  property: e,
+                  message: this.translate('error_required', [e])
+                })
               }
-              if (value[e] === undefined) {
-                errors.push({ path, property: e, message: this.translate('error_required', [e]) })
+              if (typeof value[e] === 'undefined') {
+                const editor = this.jsoneditor.getEditor(`${path}.${e}`)
+                if (editor && ['button', 'info'].includes(editor.schema.format || editor.schema.type)) return
+                errors.push({
+                  path: `${path}.${e}`,
+                  property: e,
+                  message: this.translate('error_required', [e])
+                })
               }
             }
-
-            // if (typeof value[e] !== 'undefined') return // TODO: tutto quello che sta sotto non verrà mai eseguito a meno che non sia undefined? perchè?
-            // const editor = this.jsoneditor.getEditor(`${path}.${e}`)
-            // /* Ignore required error if editor is of type "button" or "info" */
-            // if (editor && ['button', 'info'].includes(editor.schema.format || editor.schema.type)) return
-            // errors.push({
-            //   path,
-            //   property: 'required',
-            //   message: this.translate('error_required', [e])
-            // })
           })
         }
         return errors
       },
-      properties (schema, value, path, validatedProperties) {
-        console.log('properties', schema, value, path, validatedProperties)
+      properties (schema, values, path, validatedProperties) {
         const errors = []
-        Object.entries(schema.properties).forEach(([key, prop]) => {
+        Object.entries(schema.properties).forEach(([key, propertyValue]) => {
           // validatedProperties[key] = true
           // errors.push(...this._validateSchema(prop, value[key], `${path}.${key}`))
 
-          // se è number non funziona perché number vuoto è undefined
-          if (value[key] !== undefined && !this._checkType(prop.type, value[key])) {
-            errors.push({ path, property: key, message: this.translate('property_error_type', [key, prop.type]) })
+          if (values[key] !== undefined && !this._checkType(propertyValue.type, values[key])) {
+            errors.push({
+              path: `${path}.${key}`,
+              property: key,
+              message: this.translate('property_error_type', [key, propertyValue.type])
+            })
           }
         })
         return errors
@@ -490,11 +492,11 @@ export class Validator {
       return this._validateV3Required(schema, value, path)
     }
 
-    // Object.keys(schema).forEach(key => {
-    //   if (this._validateSubSchema[key]) {
-    //     errors.push(...this._validateSubSchema[key].call(this, schema, value, path))
-    //   }
-    // })
+    Object.keys(schema).forEach(key => {
+      if (this._validateSubSchema[key]) {
+        errors.push(...this._validateSubSchema[key].call(this, schema, value, path))
+      }
+    })
 
     /*
      * Type Specific Validation
@@ -517,7 +519,7 @@ export class Validator {
     }
 
     /* custom validator */
-    // errors.push(...this._validateCustomValidator(schema, value, path))
+    errors.push(...this._validateCustomValidator(schema, value, path))
 
     /* Remove duplicate errors and add "errorcount" property */
     console.log('ERRORS PUSHATI', errors)
@@ -555,7 +557,6 @@ export class Validator {
 
   _validateByValueType (schema, value, path) {
     const errors = []
-    // se il valore è null passa la validazione?
     if (value === null) return errors
     /* Number Specific Validation */
     if (typeof value === 'number') {
@@ -604,17 +605,17 @@ export class Validator {
       })
 
       /* The no_additional_properties option currently doesn't work with extended schemas that use oneOf or anyOf or allOf */
-      // if (typeof schema.additionalProperties === 'undefined' && this.jsoneditor.options.no_additional_properties && !schema.oneOf && !schema.anyOf && !schema.allOf) {
-      //   schema.additionalProperties = false
-      // }
+      if (typeof schema.additionalProperties === 'undefined' && this.jsoneditor.options.no_additional_properties && !schema.oneOf && !schema.anyOf && !schema.allOf) {
+        schema.additionalProperties = false
+      }
 
       /* `additionalProperties` */
       /* `dependencies` */
-      // Object.keys(schema).forEach(key => {
-      //   if (typeof this._validateObjectSubSchema2[key] !== 'undefined') {
-      //     errors.push(...this._validateObjectSubSchema2[key].call(this, schema, value, path, validatedProperties))
-      //   }
-      // })
+      Object.keys(schema).forEach(key => {
+        if (typeof this._validateObjectSubSchema2[key] !== 'undefined') {
+          errors.push(...this._validateObjectSubSchema2[key].call(this, schema, value, path, validatedProperties))
+        }
+      })
     }
     return errors
   }
