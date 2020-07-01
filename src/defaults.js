@@ -58,7 +58,6 @@ languages.en = {
  * @variables This key takes one variable: The type the value should be of
  */
   error_type: 'Value must be of type {{0}}',
-  property_error_type: '{{0}} must be of type {{1}}',
   /**
  *  When the value validates one of the disallowed types
  */

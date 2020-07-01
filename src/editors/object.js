@@ -1234,7 +1234,7 @@ export class ObjectEditor extends AbstractEditor {
       }
     })
 
-    // /* Show errors for this editor */
+    /* Show errors for this editor */
     if (this.error_holder) {
       if (myErrors.length) {
         this.error_holder.innerHTML = ''
@@ -1251,7 +1251,7 @@ export class ObjectEditor extends AbstractEditor {
 
     /* Show error for the table row if this is inside a table */
     if (this.options.table_row) {
-      if (this.lastErrors.length) {
+      if (myErrors.length) {
         this.theme.addTableRowError(this.container)
       } else {
         this.theme.removeTableRowError(this.container)

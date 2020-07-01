@@ -1,5 +1,4 @@
 import { extend, hasOwnProperty } from './utilities.js'
-// import { difference } from 'ramda'
 
 /**
  * All editors should extend from this class
@@ -30,9 +29,6 @@ export class AbstractEditor {
 
     if (options.container) this.setContainer(options.container)
     this.registerDependencies()
-
-    this.errorMessageNode = {}
-    this.lastErrors = []
   }
 
   onChildEditorChange (editor) {
@@ -667,5 +663,6 @@ export class AbstractEditor {
   }
 
   showValidationErrors (errors) {
+
   }
 }

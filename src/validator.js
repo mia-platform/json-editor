@@ -370,7 +370,7 @@ export class Validator {
             errors.push({
               path: `${path}.${key}`,
               property: key,
-              message: this.translate('property_error_type', [key, propertyValue.type])
+              message: this.translate('error_type', [key, propertyValue.type])
             })
           }
         })

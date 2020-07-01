@@ -113,12 +113,12 @@ export class JSONEditor {
     if (!this.ready) throw new Error("JSON Editor not ready yet.  Listen for 'ready' event before validating")
 
     /* Custom value */
-    // if (arguments.length === 1) {
-    return this.validator.validate(value || this.root.getValue())
+    if (arguments.length === 1) {
+      return this.validator.validate(value || this.root.getValue())
     /* Current value (use cached result) */
-    // } else {
-    //   return this.validation_results
-    // }
+    } else {
+      return this.validation_results
+    }
   }
 
   destroy () {
@@ -223,16 +223,24 @@ export class JSONEditor {
   onChange () {
     if (!this.ready) return
 
-    /* Validate and cache results */
-    if (this.options.show_errors !== 'never') {
-      this.validation_results = this.validator.validate(this.root.getValue())
-      this.root.showValidationErrors(this.validation_results)
-    } else {
-      this.root.showValidationErrors([])
-    }
+    if (this.firing_change) return
+    this.firing_change = true
 
-    /* Fire change event */
-    this.trigger('change')
+    window.requestAnimationFrame(() => {
+      this.firing_change = false
+      if (!this.ready) return
+
+      /* Validate and cache results */
+      if (this.options.show_errors !== 'never') {
+        this.validation_results = this.validator.validate(this.root.getValue())
+        this.root.showValidationErrors(this.validation_results)
+      } else {
+        this.root.showValidationErrors([])
+      }
+
+      /* Fire change event */
+      this.trigger('change')
+    })
 
     return this
   }
