@@ -77,21 +77,18 @@ export class JSONEditor {
       /* Starting data */
       if (hasOwnProperty(this.options, 'startval')) this.root.setValue(this.options.startval)
 
-      if (!this.options.disabled_validation_on_mount) {
-        this.validation_results = this.validator.validate(this.root.getValue())
-        this.root.showValidationErrors(this.validation_results)
-      }
+      this.validation_results = this.validator.validate(this.root.getValue())
+      this.root.showValidationErrors(this.validation_results)
+
       this.ready = true
 
       /* Fire ready event asynchronously */
       window.requestAnimationFrame(() => {
         if (!this.ready) return
-        if (!this.options.disabled_validation_on_mount) {
-          this.validation_results = this.validator.validate(this.root.getValue())
-          this.root.showValidationErrors(this.validation_results)
-          this.trigger('change')
-        }
+        this.validation_results = this.validator.validate(this.root.getValue())
+        this.root.showValidationErrors(this.validation_results)
         this.trigger('ready')
+        this.trigger('change')
       })
     }, fetchUrl, location)
   }
@@ -230,9 +227,10 @@ export class JSONEditor {
       this.firing_change = false
       if (!this.ready) return
 
+      /* Validate and cache results */
+      this.validation_results = this.validator.validate(this.root.getValue())
+
       if (this.options.show_errors !== 'never') {
-        /* Validate and cache results */
-        this.validation_results = this.validator.validate(this.root.getValue())
         this.root.showValidationErrors(this.validation_results)
       } else {
         this.root.showValidationErrors([])
