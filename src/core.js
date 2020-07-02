@@ -59,6 +59,7 @@ export class JSONEditor {
 
     loader.load(this.schema, schema => {
       const validatorOptions = this.options.custom_validators ? { custom_validators: this.options.custom_validators } : {}
+
       this.validator = new Validator(this, null, validatorOptions, JSONEditor.defaults)
 
       const editorClass = this.getEditorClass(schema)
@@ -79,7 +80,6 @@ export class JSONEditor {
 
       this.validation_results = this.validator.validate(this.root.getValue())
       this.root.showValidationErrors(this.validation_results)
-
       this.ready = true
 
       /* Fire ready event asynchronously */
