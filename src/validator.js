@@ -340,7 +340,7 @@ export class Validator {
             if (this._checkType('string', value[e]) && value[e].length === 0) {
               errors.push({
                 path: `${path}.${e}`,
-                property: e,
+                property: 'required',
                 message: this.translate('error_required', [e])
               })
             }
