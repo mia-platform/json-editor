@@ -80,9 +80,9 @@ describe('Validation Test', () => {
       })
       spec.invalid.forEach((v, i) => {
         it(`invalid data ${i + 1}`, (done) => {
-          console.log('_____', v)
           editor.on('ready', () => {
             const result = editor.validate(v)
+            console.log('_____', result, v)
             expect(result.length).toBeGreaterThan(0)
             done()
           })

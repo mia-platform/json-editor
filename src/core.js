@@ -229,7 +229,6 @@ export class JSONEditor {
     window.requestAnimationFrame(() => {
       this.firing_change = false
       if (!this.ready) return
-
       /* Validate and cache results */
       this.validation_results = this.validator.validate(this.root.getValue())
       if (this.options.show_errors !== 'never') {
