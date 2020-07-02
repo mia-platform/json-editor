@@ -114,8 +114,8 @@ export class JSONEditor {
 
     /* Custom value */
     if (arguments.length === 1) {
-      return this.validator.validate(value || this.root.getValue())
-    /* Current value (use cached result) */
+      return this.validator.validate(value)
+      /* Current value (use cached result) */
     } else {
       return this.validation_results
     }
@@ -231,8 +231,8 @@ export class JSONEditor {
       if (!this.ready) return
 
       /* Validate and cache results */
+      this.validation_results = this.validator.validate(this.root.getValue())
       if (this.options.show_errors !== 'never') {
-        this.validation_results = this.validator.validate(this.root.getValue())
         this.root.showValidationErrors(this.validation_results)
       } else {
         this.root.showValidationErrors([])

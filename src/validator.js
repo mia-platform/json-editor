@@ -337,40 +337,35 @@ export class Validator {
         const errors = []
         if (Array.isArray(schema.required)) {
           schema.required.forEach(e => {
-            // eslint-disable-next-line no-prototype-builtins
-            if (value.hasOwnProperty(e)) {
-              if (this._checkType('string', value[e]) && value[e].length === 0) {
-                errors.push({
-                  path: `${path}.${e}`,
-                  property: e,
-                  message: this.translate('error_required', [e])
-                })
-              }
-              if (typeof value[e] === 'undefined') {
-                const editor = this.jsoneditor.getEditor(`${path}.${e}`)
-                if (editor && ['button', 'info'].includes(editor.schema.format || editor.schema.type)) return
-                errors.push({
-                  path: `${path}.${e}`,
-                  property: e,
-                  message: this.translate('error_required', [e])
-                })
-              }
+            if (this._checkType('string', value[e]) && value[e].length === 0) {
+              errors.push({
+                path: `${path}.${e}`,
+                property: e,
+                message: this.translate('error_required', [e])
+              })
             }
+            if (typeof value[e] !== 'undefined') return
+            const editor = this.jsoneditor.getEditor(`${path}.${e}`)
+            if (editor && ['button', 'info'].includes(editor.schema.format || editor.schema.type)) return
+            errors.push({
+              path: `${path}.${e}`,
+              property: 'required',
+              message: this.translate('error_required', [e])
+            })
           })
         }
         return errors
       },
-      properties (schema, values, path, validatedProperties) {
+      properties (schema, value, path, validatedProperties) {
         const errors = []
-        Object.entries(schema.properties).forEach(([key, propertyValue]) => {
+        Object.entries(schema.properties).forEach(([key, prop]) => {
           validatedProperties[key] = true
-          errors.push(...this._validateSchema(key, values[key], `${path}.${key}`))
-
-          if (values[key] !== undefined && !this._checkType(propertyValue.type, values[key])) {
+          errors.push(...this._validateSchema(key, value[key], `${path}.${key}`))
+          if (value[key] !== undefined && !this._checkType(prop.type, value[key])) {
             errors.push({
               path: `${path}.${key}`,
               property: key,
-              message: this.translate('error_type', [key, propertyValue.type])
+              message: this.translate('error_type', [key, prop.type])
             })
           }
         })
