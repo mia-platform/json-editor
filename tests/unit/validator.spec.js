@@ -82,7 +82,6 @@ describe('Validation Test', () => {
         it(`invalid data ${i + 1}`, (done) => {
           editor.on('ready', () => {
             const result = editor.validate(v)
-            console.log('_____', result, v)
             expect(result.length).toBeGreaterThan(0)
             done()
           })
