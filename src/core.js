@@ -60,7 +60,6 @@ export class JSONEditor {
     loader.load(this.schema, schema => {
       const validatorOptions = this.options.custom_validators ? { custom_validators: this.options.custom_validators } : {}
       this.validator = new Validator(this, null, validatorOptions, JSONEditor.defaults)
-
       const editorClass = this.getEditorClass(schema)
 
       this.root = this.createEditor(editorClass, {
@@ -222,10 +221,8 @@ export class JSONEditor {
 
   onChange () {
     if (!this.ready) return
-
     if (this.firing_change) return
     this.firing_change = true
-
     window.requestAnimationFrame(() => {
       this.firing_change = false
       if (!this.ready) return
