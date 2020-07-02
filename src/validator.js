@@ -349,7 +349,7 @@ export class Validator {
             /* Ignore required error if editor is of type "button" or "info" */
             if (editor && ['button', 'info'].includes(editor.schema.format || editor.schema.type)) return
             errors.push({
-              path,
+              path: `${path}.${e}`,
               property: 'required',
               message: this.translate('error_required', [e])
             })
@@ -361,14 +361,7 @@ export class Validator {
         const errors = []
         Object.entries(schema.properties).forEach(([key, prop]) => {
           validatedProperties[key] = true
-          errors.push(...this._validateSchema(key, value[key], `${path}.${key}`))
-          if (value[key] !== undefined && !this._checkType(prop.type, value[key])) {
-            errors.push({
-              path: `${path}.${key}`,
-              property: key,
-              message: this.translate('error_type', [key, prop.type])
-            })
-          }
+          errors.push(...this._validateSchema(prop, value[key], `${path}.${key}`))
         })
         return errors
       },
