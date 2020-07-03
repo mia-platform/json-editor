@@ -284,7 +284,7 @@ function translate (key, variables) {
   return string
 }
 
-export const UNDER_FIELD = 'under_field' // ['under_field', 'grouped']
+export const UNDER_FIELD = 'under_field'
 export const GROUPED = 'grouped'
 /* Default options when initializing JSON Editor */
 const options = {
