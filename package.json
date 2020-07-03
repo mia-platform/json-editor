@@ -1,5 +1,5 @@
 {
-  "name": "@mia-platform/json-editor",
+  "name": "@json-editor/json-editor",
   "title": "JSONEditor",
   "description": "JSON Schema based editor",
   "version": "2.2.1",
