@@ -3,7 +3,7 @@
 - added option `use_default_values` used to specify if default values based on the "type" of the property have to be used
 - when `use_default_values` is false, number and integer fields have undefined value when input is empty
 - when `use_default_values` is false, string fields have undefined value at the beginning. After that user edit the field, empty input is threated as an empty string
-- changed position of errors logs down to each field 
+- changed position of errors logs below each field 
 
 ### 2.3.0-dev
 
