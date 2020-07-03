@@ -407,7 +407,6 @@ export class bootstrap4Theme extends AbstractTheme {
     }
 
     input.errmsg.textContent = text
-    return input
   }
 
   removeInputError (input) {
