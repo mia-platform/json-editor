@@ -288,7 +288,7 @@ Here are all the available options:
   </tr>
   <tr>
     <td>validation_error_placement</td>
-    <td>Change position where errors are shown</td>
+    <td>Change position where errors are shown. Values are oneOf['grouped', 'below_field']</td>
     <td><code>grouped</code></td>
   </tr>
   </tbody>
