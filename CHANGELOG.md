@@ -1,5 +1,9 @@
 ### Unreleased
 
+### 2.3.2
+
+- added option `validation_error_placement` to change position of errors logs under each field 
+
 ### 2.3.1
 
 - fix: when `use_default_values` is false, number and integer fields have undefined value when input is empty
@@ -9,7 +13,6 @@
 
 - added option `max_depth` used to specify the maximum depth of level's schema that have to be rendered
 - added option `use_default_values` used to specify if default values based on the "type" of the property have to be used
-
 
 ### 2.3.0-dev
 
